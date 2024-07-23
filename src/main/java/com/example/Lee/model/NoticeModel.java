@@ -1,45 +1,48 @@
 package com.example.Lee.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.time.LocalDateTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Table;
+import jakarta.persistence.PrePersist;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "notice_list")
 public class NoticeModel {
-	
-    @Id // 기본 키(PK) 필드임을 나타냄
-    private String membId;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long creSEQ; // Long 타입으로 설정
     
-    @Column(nullable = false)
+    @Column(name="MEMB_ID")
+    private String membId;
+
+    @Column(name="TIT")
     private String title;
 
-    @Column(nullable = false)
+    @Column(name="CONT")
     private String content;
 
-    @Column(nullable = false)
+    @Column(name="CRE_DATE")
     private LocalDateTime createdDate;
 
-    // 기본 생성자: JPA에서 엔티티 클래스는 기본 생성자를 가지고 있어야 함
-    public NoticeModel() {
+    // Getter and Setter
+    public Long getSeq() {
+        return creSEQ;
     }
 
-    // 모든 속성을 포함하는 생성자
-    public NoticeModel(String membId, String title, String content, LocalDateTime createdDate) {        
-    	this.membId = membId;
-    	this.title = title;
-        this.content = content;
-        this.createdDate = createdDate;
+    public void setSeq(Long creSEQ) {
+        this.creSEQ = creSEQ;
     }
 
-    // Getter and Setter 메서드: 엔티티의 속성에 접근하기 위한 메서드
-    public String getId() {
+    public String getMembId() {
         return membId;
     }
 
-    public void setId(String membId) {
+    public void setMembId(String membId) {
         this.membId = membId;
     }
 
@@ -65,5 +68,10 @@ public class NoticeModel {
 
     public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdDate = LocalDateTime.now();
     }
 }
