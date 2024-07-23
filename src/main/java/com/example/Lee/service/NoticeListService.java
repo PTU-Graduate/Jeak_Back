@@ -1,13 +1,23 @@
 package com.example.Lee.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.Lee.dao.NoticeListDao;
 import com.example.Lee.model.NoticeModel;
 
-import java.util.List;
+@Service
+public class NoticeListService {
 
-public interface NoticeListService {
-    List<NoticeModel> getAllNotices();
-    NoticeModel getNoticeById(String membId);
-    NoticeModel createNotice(NoticeModel notice);
-    NoticeModel updateNotice(String id, NoticeModel notice);
-    void deleteNotice(String id);
+    @Autowired
+    private NoticeListDao noticeDao;
+
+    @Transactional
+    public NoticeModel saveNotice(NoticeModel notice) {
+        if (notice.getTitle() == null || notice.getContent() == null) {
+            throw new IllegalArgumentException("Title and Content cannot be null");
+        }
+        return noticeDao.save(notice);
+    }
 }
