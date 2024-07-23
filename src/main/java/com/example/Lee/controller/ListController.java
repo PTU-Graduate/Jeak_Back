@@ -1,49 +1,42 @@
 package com.example.Lee.controller;
 
-import com.example.Lee.model.NoticeModel;
-import com.example.Lee.service.NoticeListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import com.example.Lee.model.NoticeModel;
+import com.example.Lee.service.NoticeListService;
 
-import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/noticeList")
 public class ListController {
 
-    private final NoticeListService noticeListService;
+    private final NoticeListService noticeService;
 
     @Autowired
-    public ListController(NoticeListService noticeListService) {
-        this.noticeListService = noticeListService;
+    public ListController(NoticeListService noticeService) {
+        this.noticeService = noticeService;
     }
 
-    @GetMapping
-    public List<NoticeModel> getAllNotices() {
-        return noticeListService.getAllNotices();
-    }
+    @PostMapping("/PTU/Notice/add")
+    public ResponseEntity<String> createNotice(@RequestBody Map<String, String> requestData) {
+        String membId = requestData.get("MEMB_ID");
+        String title = requestData.get("TIT");
+        String content = requestData.get("CONT");
 
-    @GetMapping("/{membId}")
-    public ResponseEntity<NoticeModel> getNoticeById(@PathVariable String membId) {
-        NoticeModel notice = noticeListService.getNoticeById(membId);
-        return ResponseEntity.ok(notice);
-    }
+        if (membId == null || membId.isEmpty() || title == null || title.isEmpty() || content == null || content.isEmpty()) {
+            return ResponseEntity.badRequest().body("Title and Content cannot be empty.");
+        }
 
-    @PostMapping
-    public NoticeModel createNotice(@RequestBody NoticeModel notice) {
-        return noticeListService.createNotice(notice);
-    }
+        NoticeModel notice = new NoticeModel();
+        notice.setMembId(membId);
+        notice.setTitle(title);
+        notice.setContent(content);
 
-    @PutMapping("/{membId}")
-    public ResponseEntity<NoticeModel> updateNotice(@PathVariable String membId, @RequestBody NoticeModel notice) {
-        NoticeModel updatedNotice = noticeListService.updateNotice(membId, notice);
-        return ResponseEntity.ok(updatedNotice);
-    }
+        noticeService.saveNotice(notice);
 
-    @DeleteMapping("/{membId}")
-    public ResponseEntity<Void> deleteNotice(@PathVariable String membId) {
-        noticeListService.deleteNotice(membId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Notice created successfully.");
     }
 }
