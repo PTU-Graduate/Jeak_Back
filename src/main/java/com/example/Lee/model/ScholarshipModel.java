@@ -24,7 +24,7 @@ public class ScholarshipModel {
 	   private String title;
 	   
 	   @Column(name="CONT")
-      private String content;
+	   private String content;
  
        @Column(name="CRE_DATE")
        private LocalDateTime createDate;
@@ -53,7 +53,7 @@ public class ScholarshipModel {
     	   this.title = title;
        }
        
-       public String getContenet( ) {
+       public String getContent( ) {
     	   return content;
        }
        
