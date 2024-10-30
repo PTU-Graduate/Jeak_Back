@@ -9,10 +9,5 @@ import java.time.LocalDateTime;
 import com.example.Lee.model.NoticeModel;
 
 public interface NoticeListDao extends JpaRepository<NoticeModel, Long> {
-    
-    // 공지사항 등록을 위한 커스텀 쿼리
-    @Transactional
-    @Modifying
-    @Query(value = "INSERT INTO notice_list (CRE_SEQ, MEMB_ID, TIT, CONT, CRE_DATE) VALUES (:creSEQ, :membId, :title, :content, :createdDate)", nativeQuery = true)
-    void saveNotice(String creSEQ, String membId, String title, String content, LocalDateTime createdDate);
+   
 }
