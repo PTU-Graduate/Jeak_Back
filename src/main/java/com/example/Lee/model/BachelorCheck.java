@@ -1,44 +1,40 @@
 package com.example.Lee.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-import jakarta.persistence.Table;
-import jakarta.persistence.PrePersist;
+import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
+import jakarta.persistence.PrePersist;
 
 @Entity
-@Table(name = "notice_list")
-public class NoticeModel {
-
+@Table(name = "bachelor_list")
+public class BachelorCheck {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CRE_SEQ")
-    private Long creSEQ; // Long 타입으로 설정
-    
-    @Column(name="MEMB_ID")
+    private Long creSeq;
+
+    @Column(name = "MEMB_ID")
     private String membId;
 
-    @Column(name="TIT")
+    @Column(name = "TIT")
     private String title;
 
-    @Column(name="CONT")
+    @Column(name = "CONT")
     private String content;
 
-    @Column(name="CRE_DATE")
-    private LocalDateTime createdDate;
+    @Column(name = "CRE_DATE")
+    private LocalDateTime creDate;
 
-    // Getter and Setter
-    public Long getSeq() {
-        return creSEQ;
+    // Getters and Setters
+    @JsonProperty("CRE_SEQ")
+    public Long getCreSeq() {
+        return creSeq;
     }
 
-    public void setSeq(Long creSEQ) {
-        this.creSEQ = creSEQ;
+    public void setCreSeq(Long creSeq) {
+        this.creSeq = creSeq;
     }
-
+    @JsonProperty("MEMB_ID")
     public String getMembId() {
         return membId;
     }
@@ -46,7 +42,7 @@ public class NoticeModel {
     public void setMembId(String membId) {
         this.membId = membId;
     }
-
+    @JsonProperty("TIT")
     public String getTitle() {
         return title;
     }
@@ -54,7 +50,7 @@ public class NoticeModel {
     public void setTitle(String title) {
         this.title = title;
     }
-
+    @JsonProperty("CONT")
     public String getContent() {
         return content;
     }
@@ -62,17 +58,17 @@ public class NoticeModel {
     public void setContent(String content) {
         this.content = content;
     }
-
+    @JsonProperty("CRE_DATE")
     public LocalDateTime getCreatedDate() {
-        return createdDate;
+        return creDate;
     }
 
     public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
+        this.creDate = createdDate;
     }
-
+    
     @PrePersist
     protected void onCreate() {
-        this.createdDate = LocalDateTime.now();
+        this.creDate = LocalDateTime.now();
     }
 }
