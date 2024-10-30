@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.Lee.model.CommonResponseModel;
 import com.example.Lee.dao.NoticeListDao;
 import com.example.Lee.model.NoticeModel;
 
@@ -12,12 +13,39 @@ public class NoticeListService {
 
     @Autowired
     private NoticeListDao noticeDao;
-
+    
+    //공지사항 저장 메소드
     @Transactional
-    public NoticeModel saveNotice(NoticeModel notice) {
+    public CommonResponseModel saveNotice(NoticeModel notice) {
         if (notice.getTitle() == null || notice.getContent() == null) {
-            throw new IllegalArgumentException("Title and Content cannot be null");
+            return new CommonResponseModel("01");
         }
-        return noticeDao.save(notice);
+        noticeDao.save(notice);
+        return new CommonResponseModel("00");
+    }
+    
+    @Transactional
+    public CommonResponseModel updateNotice(int creSeq, String title, String content) {
+    	NoticeModel notice = noticeDao.findById((long) creSeq).orElse(null);
+    	if (notice == null) {
+    		return new CommonResponseModel("01");
+    	}
+    	
+    	notice.setTitle(title);
+    	notice.setContent(content);
+    	noticeDao.save(notice);
+    	
+    	return new CommonResponseModel("00");
+    }
+    
+    @Transactional
+    public CommonResponseModel deleteNotice(int creSeq) {
+    	NoticeModel notice = noticeDao.findById((long) creSeq).orElse(null);
+    	if (notice == null) {
+    		return new CommonResponseModel("01");
+    	}
+    	
+    	noticeDao.delete(notice);
+    	return new CommonResponseModel("00");
     }
 }
