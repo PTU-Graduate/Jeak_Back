@@ -132,8 +132,6 @@ public class RegiController {
         regiData.setStdNum(stdNum);
         regiData.setEmail(email);
         regiData.setPass(requestData.get("PASS"));
-        regiData.setStdDepCd(requestData.get("STD_DEP_CD"));
-        regiData.setName(requestData.get("NAME"));
 
         // 회원 정보 저장
         CommonResponseModel result = regiService.completeRegistration(regiData);
