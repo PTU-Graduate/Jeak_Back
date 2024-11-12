@@ -1,5 +1,6 @@
 package com.example.Lee.controller;
 
+import com.example.Lee.model.CommonResponseModel;
 import com.example.Lee.model.ScholarCheck;
 import com.example.Lee.service.ScholarCheckService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,13 +41,13 @@ public class ScholarCheckController {
     
     //장학안내 추가 엔드포인트
     @PostMapping("/PTU/Scholar/add")
-    public ResponseEntity<String> createScholar(@RequestBody Map<String, String> requestData) {
+    public ResponseEntity<CommonResponseModel> createScholar(@RequestBody Map<String, String> requestData) {
         String membId = requestData.get("MEMB_ID");
         String title = requestData.get("TIT");
         String content = requestData.get("CONT");
 
         if (membId == null || membId.isEmpty() || title == null || title.isEmpty() || content == null || content.isEmpty()) {
-            return ResponseEntity.badRequest().body("Title and Content cannot be empty.");
+        	return ResponseEntity.badRequest().body(new CommonResponseModel("01"));
         }
 
         ScholarCheck scholar = new ScholarCheck();
@@ -56,7 +57,28 @@ public class ScholarCheckController {
 
         scholarCheckService.saveScholar(scholar);
 
-        return ResponseEntity.ok("Scholar created successfully.");
+        return ResponseEntity.ok(new CommonResponseModel("00"));
+    }
+    
+    //장학안내 업데이트 엔드포인트
+    @PostMapping("/PTU/Scholar/update")
+    public ResponseEntity<CommonResponseModel> updateScholar(@RequestBody Map<String, String> requestData) {
+    	int creSeq = Integer.parseInt(requestData.get("CRE_SEQ"));
+    	String title = requestData.get("TIT");
+    	String content = requestData.get("CONT");
+    	
+    	CommonResponseModel response = scholarCheckService.updateScholar(creSeq, title, content);
+    	return ResponseEntity.ok(response);
+    }
+    
+    //장학안내 삭제 엔드포인트
+    @PostMapping("/PTU/Scholar/delete")
+    public ResponseEntity<CommonResponseModel> deleteScholar(@RequestBody Map<String, String> requestData) {
+    	int creSeq = Integer.parseInt(requestData.get("CRE_SEQ"));
+    	
+    	CommonResponseModel response = scholarCheckService.deleteScholar(creSeq);
+    	return ResponseEntity.ok(response);
+    	
     }
     
 }
