@@ -24,6 +24,7 @@ public class NoticeListService {
         return new CommonResponseModel("00");
     }
     
+    //공지사항 업데이트 메소드
     @Transactional
     public CommonResponseModel updateNotice(int creSeq, String title, String content) {
     	NoticeModel notice = noticeDao.findById((long) creSeq).orElse(null);
@@ -38,6 +39,7 @@ public class NoticeListService {
     	return new CommonResponseModel("00");
     }
     
+    //공지사항 삭제 메소드
     @Transactional
     public CommonResponseModel deleteNotice(int creSeq) {
     	NoticeModel notice = noticeDao.findById((long) creSeq).orElse(null);

@@ -1,5 +1,6 @@
 package com.example.Lee.controller;
 
+import com.example.Lee.model.CommonResponseModel;
 import com.example.Lee.model.EntranceCheck;
 import com.example.Lee.service.EntranceCheckService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,13 +41,13 @@ public class EntranceCheckController {
     
     //입학안내 추가 엔드포인트
     @PostMapping("/PTU/Entrance/add")
-    public ResponseEntity<String> createEntrance(@RequestBody Map<String, String> requestData) {
+    public ResponseEntity<CommonResponseModel> createEntrance(@RequestBody Map<String, String> requestData) {
         String membId = requestData.get("MEMB_ID");
         String title = requestData.get("TIT");
         String content = requestData.get("CONT");
 
         if (membId == null || membId.isEmpty() || title == null || title.isEmpty() || content == null || content.isEmpty()) {
-            return ResponseEntity.badRequest().body("Title and Content cannot be empty.");
+            return ResponseEntity.badRequest().body(new CommonResponseModel("01"));
         }
 
         EntranceCheck entrance = new EntranceCheck();
@@ -56,6 +57,26 @@ public class EntranceCheckController {
 
         entranceCheckService.saveEntrance(entrance);
 
-        return ResponseEntity.ok("Entrance created successfully.");
+        return ResponseEntity.ok(new CommonResponseModel("00"));
+    }
+    
+    //입학안내 업데이트 엔드포인트
+    @PostMapping("/PTU/Entrance/update")
+    public ResponseEntity<CommonResponseModel> updateEntrance(@RequestBody Map<String, String> requestData) {
+    	int creSeq = Integer.parseInt(requestData.get("CRE_SEQ"));
+    	String title = requestData.get("TIT");
+    	String content = requestData.get("CONT");
+    	
+    	CommonResponseModel response = entranceCheckService.updateEntrance(creSeq, title, content);
+    	return ResponseEntity.ok(response);
+    }
+    
+    //입학안내 삭제 엔드포인트
+    @PostMapping("/PTU/Entrance/delete")
+    public ResponseEntity<CommonResponseModel> deleteEntrance(@RequestBody Map<String, String> requestData) {
+    	int creSeq = Integer.parseInt(requestData.get("CRE_SEQ"));
+    	
+    	CommonResponseModel response = entranceCheckService.deleteEntrance(creSeq);
+    	return ResponseEntity.ok(response);
     }
 }

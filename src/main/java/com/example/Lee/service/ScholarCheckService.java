@@ -1,5 +1,6 @@
 package com.example.Lee.service;
 
+import com.example.Lee.model.CommonResponseModel;
 import com.example.Lee.model.ScholarCheck;
 import com.example.Lee.dao.ScholarCheckDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,37 @@ public class ScholarCheckService {
     
     //장학안내 저장 메소드
     @Transactional
-    public ScholarCheck saveScholar(ScholarCheck scholar) {
+    public CommonResponseModel saveScholar(ScholarCheck scholar) {
         if (scholar.getTitle() == null || scholar.getContent() == null) {
-            throw new IllegalArgumentException("Title and Content cannot be null");
+        	return new CommonResponseModel("01");
         }
-        return scholarCheckDao.save(scholar);
+        return new CommonResponseModel("00");
+    }
+    
+    //장학안내 업데이트 메소드
+    @Transactional
+    public CommonResponseModel updateScholar(int creSeq, String title, String content) {
+    	ScholarCheck scholar = scholarCheckDao.findById((long) creSeq).orElse(null);
+    	if (scholar == null) {
+    		return new CommonResponseModel("01");
+    	}
+    	
+    	scholar.setTitle(title);
+    	scholar.setContent(content);
+    	scholarCheckDao.save(scholar);
+    	
+    	return new CommonResponseModel("00");
+    }
+    
+    //장학안내 삭제 메소드
+    @Transactional
+    public CommonResponseModel deleteScholar(int creSeq) {
+    	ScholarCheck scholar = scholarCheckDao.findById((long) creSeq).orElse(null);
+    	if (scholar == null) {
+    		return new CommonResponseModel("01");
+    	}
+    	
+    	scholarCheckDao.delete(scholar);
+    	return new CommonResponseModel("00");
     }
 }
