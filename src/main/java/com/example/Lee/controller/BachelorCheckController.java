@@ -1,6 +1,7 @@
 package com.example.Lee.controller;
 
 import com.example.Lee.model.BachelorCheck;
+import com.example.Lee.model.CommonResponseModel;
 import com.example.Lee.service.BachelorCheckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -40,13 +41,13 @@ public class BachelorCheckController {
     
     // 학사안내 추가 엔드포인트
     @PostMapping("/PTU/Bachelor/add")
-    public ResponseEntity<String> createBachelor(@RequestBody Map<String, String> requestData) {
+    public ResponseEntity<CommonResponseModel> createBachelor(@RequestBody Map<String, String> requestData) {
         String membId = requestData.get("MEMB_ID");
         String title = requestData.get("TIT");
         String content = requestData.get("CONT");
 
         if (membId == null || membId.isEmpty() || title == null || title.isEmpty() || content == null || content.isEmpty()) {
-            return ResponseEntity.badRequest().body("Title and Content cannot be empty.");
+            return ResponseEntity.badRequest().body(new CommonResponseModel("01"));
         }
 
         BachelorCheck bachelor = new BachelorCheck();
@@ -56,7 +57,28 @@ public class BachelorCheckController {
 
         bachelorCheckService.saveBachelor(bachelor);
 
-        return ResponseEntity.ok("Bachelor created successfully.");
+        return ResponseEntity.ok(new CommonResponseModel("00"));
+    }
+    
+    //학사안내 업데이트 엔드포인트
+    @PostMapping("/PTU/Bachelor/update")
+    public ResponseEntity<CommonResponseModel> updateBachelor(@RequestBody Map<String, String> requestData) {
+    	int creSeq = Integer.parseInt(requestData.get("CRE_SEQ"));
+    	String title = requestData.get("TIT");
+    	String content = requestData.get("CONT");
+    	
+    	CommonResponseModel response = bachelorCheckService.updateBachelor(creSeq, title, content);
+    	return ResponseEntity.ok(response);
+    }
+    
+    //학사안내 삭제 엔드포인트
+    @PostMapping("/PTU/Bachelor/delete")
+    public ResponseEntity<CommonResponseModel> deleteBachelor(@RequestBody Map<String, String> requestData) {
+    	int creSeq = Integer.parseInt(requestData.get("CRE_SEQ"));
+    	
+    	CommonResponseModel response = bachelorCheckService.deleteBachelor(creSeq);
+    	return ResponseEntity.ok(response);
+    	
     }
     
 }

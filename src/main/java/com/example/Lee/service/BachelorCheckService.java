@@ -1,6 +1,7 @@
 package com.example.Lee.service;
 
 import com.example.Lee.model.BachelorCheck;
+import com.example.Lee.model.CommonResponseModel;
 import com.example.Lee.dao.BachelorCheckDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,10 +26,38 @@ public class BachelorCheckService {
     
     //학사안내 저장 메소드
     @Transactional
-    public BachelorCheck saveBachelor(BachelorCheck bachelor) {
+    public CommonResponseModel saveBachelor(BachelorCheck bachelor) {
         if (bachelor.getTitle() == null || bachelor.getContent() == null) {
-            throw new IllegalArgumentException("Title and Content cannot be null");
+        	return new CommonResponseModel("01");
         }
-        return bachelorCheckDao.save(bachelor);
+        bachelorCheckDao.save(bachelor);
+        return new CommonResponseModel("00");
+    }
+    
+    //학사안내 업데이트 메소드
+    @Transactional
+    public CommonResponseModel updateBachelor(int creSeq, String title, String content) {
+    	BachelorCheck bachelor = bachelorCheckDao.findById((long) creSeq).orElse(null);
+    	if (bachelor == null) {
+    		return new CommonResponseModel("01");
+    	}
+    	
+    	bachelor.setTitle(title);
+    	bachelor.setContent(content);
+    	bachelorCheckDao.save(bachelor);
+    	
+    	return new CommonResponseModel("00");
+    }
+    
+    //학사안내 삭제 메소드
+    @Transactional
+    public CommonResponseModel deleteBachelor(int creSeq) {
+    	BachelorCheck bachelor = bachelorCheckDao.findById((long) creSeq).orElse(null);
+    	if (bachelor == null) {
+    		return new CommonResponseModel("01");
+    	}
+    	
+    	bachelorCheckDao.delete(bachelor);
+    	return new CommonResponseModel("00");
     }
 }

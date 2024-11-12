@@ -1,5 +1,6 @@
 package com.example.Lee.service;
 
+import com.example.Lee.model.CommonResponseModel;
 import com.example.Lee.model.EntranceCheck;
 import com.example.Lee.dao.EntranceCheckDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,38 @@ public class EntranceCheckService {
     
     //입학안내 저장 메소드
     @Transactional
-    public EntranceCheck saveEntrance(EntranceCheck entrance) {
+    public CommonResponseModel saveEntrance(EntranceCheck entrance) {
         if (entrance.getTitle() == null || entrance.getContent() == null) {
-            throw new IllegalArgumentException("Title and Content cannot be null");
+            return new CommonResponseModel("01");
         }
-        return entranceCheckDao.save(entrance);
+        entranceCheckDao.save(entrance);
+        return new CommonResponseModel("00");
+    }
+    
+    //학사안내 업데이트 메소드
+    @Transactional
+    public CommonResponseModel updateEntrance(int creSeq, String title, String content) {
+    	EntranceCheck entrance = entranceCheckDao.findById((long) creSeq).orElse(null);
+    	if (entrance == null) {
+    		return new CommonResponseModel("01");
+    	}
+    	
+    	entrance.setTitle(title);
+    	entrance.setContent(content);
+    	entranceCheckDao.save(entrance);
+    	
+    	return new CommonResponseModel("00");
+    }
+    
+    //학사안내 삭제 메소드
+    @Transactional
+    public CommonResponseModel deleteEntrance(int creSeq) {
+    	EntranceCheck entrance = entranceCheckDao.findById((long) creSeq).orElse(null);
+    	if (entrance == null) {
+    		return new CommonResponseModel("01");
+    	}
+    	
+    	entranceCheckDao.delete(entrance);
+    	return new CommonResponseModel("00");
     }
 }
