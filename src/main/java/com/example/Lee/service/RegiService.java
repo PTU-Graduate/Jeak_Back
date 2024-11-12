@@ -63,8 +63,6 @@ public class RegiService {
         // 추가 정보를 업데이트
         existingData.setEmail(regiData.getEmail());
         existingData.setPass(regiData.getPass());
-        existingData.setStdDepCd(regiData.getStdDepCd());
-        existingData.setName(regiData.getName());
 
         // 최종 정보 업데이트
         regiRepository.save(existingData);

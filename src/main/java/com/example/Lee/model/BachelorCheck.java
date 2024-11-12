@@ -8,6 +8,7 @@ import jakarta.persistence.PrePersist;
 @Entity
 @Table(name = "bachelor_list")
 public class BachelorCheck {
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CRE_SEQ")
