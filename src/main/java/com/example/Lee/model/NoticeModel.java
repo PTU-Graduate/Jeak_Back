@@ -30,6 +30,9 @@ public class NoticeModel {
     @Column(name="CRE_DATE")
     private LocalDateTime createdDate;
 
+    @Column(name="IMG_CD")  // DB의 이미지 경로 컬럼명에 맞게 변경
+    private String imgCd;  // 이미지 경로를 저장할 필드명
+
     // Getter and Setter
     public Long getSeq() {
         return creSEQ;
@@ -69,6 +72,14 @@ public class NoticeModel {
 
     public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public String getImgCd() {  // 이미지 경로에 대한 getter
+        return imgCd;
+    }
+
+    public void setImgCd(String imgCd) {  // 이미지 경로에 대한 setter
+        this.imgCd = imgCd;
     }
 
     @PrePersist
