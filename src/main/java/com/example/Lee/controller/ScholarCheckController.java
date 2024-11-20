@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,10 +42,11 @@ public class ScholarCheckController {
     
     //장학안내 추가 엔드포인트
     @PostMapping("/PTU/Scholar/add")
-    public ResponseEntity<CommonResponseModel> createScholar(@RequestBody Map<String, String> requestData) {
-        String membId = requestData.get("MEMB_ID");
-        String title = requestData.get("TIT");
-        String content = requestData.get("CONT");
+    public ResponseEntity<CommonResponseModel> createScholar(
+            @RequestParam("MEMB_ID") String membId,
+            @RequestParam("TIT") String title,
+            @RequestParam("CONT") String content,
+            @RequestParam(value = "IMAGE", required = false) MultipartFile imageFile) {
 
         if (membId == null || membId.isEmpty() || title == null || title.isEmpty() || content == null || content.isEmpty()) {
         	return ResponseEntity.badRequest().body(new CommonResponseModel("01"));
@@ -54,10 +56,13 @@ public class ScholarCheckController {
         scholar.setMembId(membId);
         scholar.setTitle(title);
         scholar.setContent(content);
+        
+        if (imageFile == null || imageFile.isEmpty()) {
+        	scholar.setImgCd(null);
+        }
 
-        scholarCheckService.saveScholar(scholar);
-
-        return ResponseEntity.ok(new CommonResponseModel("00"));
+        CommonResponseModel response = scholarCheckService.saveScholar(scholar, imageFile, membId);
+        return ResponseEntity.ok(response);
     }
     
     //장학안내 업데이트 엔드포인트
