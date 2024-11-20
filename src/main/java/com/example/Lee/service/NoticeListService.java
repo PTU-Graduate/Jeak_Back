@@ -42,20 +42,49 @@ public class NoticeListService {
         }
     }
     
-    //공지사항 업데이트 메소드
     @Transactional
-    public CommonResponseModel updateNotice(int creSeq, String title, String content) {
-    	NoticeModel notice = noticeDao.findById((long) creSeq).orElse(null);
-    	if (notice == null) {
-    		return new CommonResponseModel("01");
-    	}
-    	
-    	notice.setTitle(title);
-    	notice.setContent(content);
-    	noticeDao.save(notice);
-    	
-    	return new CommonResponseModel("00");
+    public CommonResponseModel updateNotice(int creSeq, String title, String content, MultipartFile imageFile, String imageUrl) throws IOException {
+        NoticeModel notice = noticeDao.findById((long) creSeq).orElse(null);
+        if (notice == null) {
+            return new CommonResponseModel("01");
+        }
+
+        // 기존 이미지 경로
+        String existingImagePath = notice.getImgCd();
+
+        // 이미지 처리
+        if (imageFile != null && !imageFile.isEmpty()) {
+            // 새 이미지를 업로드
+            String newImagePath = imageFileUploadSystem.saveImageFile(imageFile, String.valueOf(creSeq));
+
+            // 기존 이미지 삭제
+            if (existingImagePath != null) {
+                imageFileUploadSystem.deleteImageFile(existingImagePath);
+            }
+
+            // 새로운 이미지 경로 업데이트
+            notice.setImgCd(newImagePath);
+
+        } else if (imageUrl == null) {
+            // 클라이언트에서 null을 보낸 경우 (이미지 삭제 요청)
+            if (existingImagePath != null) {
+                imageFileUploadSystem.deleteImageFile(existingImagePath);
+                notice.setImgCd(null);
+            }
+        }
+
+        // 제목 및 내용 업데이트
+        notice.setTitle(title);
+        notice.setContent(content);
+
+        // 저장
+        noticeDao.save(notice);
+
+        return new CommonResponseModel("00");
     }
+
+
+
     
     //공지사항 삭제 메소드
     @Transactional
