@@ -18,6 +18,7 @@ public class ImageFileUploadSystem {
     @Value("${client.base.url}")
     private String clientBaseUrl;
 
+    // 이미지 파일 저장 메소드
     public String saveImageFile(MultipartFile file, String userId) throws IOException {
         // 오늘 날짜로 디렉토리 생성
         String dateDir = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
@@ -50,4 +51,29 @@ public class ImageFileUploadSystem {
         return clientBaseUrl + relativePath;
     }
 
+    // 이미지 파일 삭제 메소드
+    public boolean deleteImageFile(String imagePath) {
+        try {
+            // 이미지 경로가 유효한지 확인
+            if (imagePath == null || imagePath.isEmpty()) {
+                return false;
+            }
+
+            // 서버 내 실제 파일 경로 생성
+            Path filePath = Paths.get(uploadDir, imagePath.replaceFirst("^/uploads/", ""));
+
+            // 파일이 존재하는 경우 삭제
+            if (Files.exists(filePath)) {
+                Files.delete(filePath);
+                return true; // 성공적으로 삭제됨
+            } else {
+                System.out.println("파일이 존재하지 않습니다: " + filePath);
+                return false; // 파일이 존재하지 않음
+            }
+        } catch (Exception e) {
+            // 예외 처리
+            System.err.println("이미지 파일 삭제 중 오류 발생: " + e.getMessage());
+            return false;
+        }
+    }
 }
