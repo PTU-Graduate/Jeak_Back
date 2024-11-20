@@ -24,7 +24,10 @@ public class EntranceCheck {
 
     @Column(name = "CRE_DATE")
     private LocalDateTime creDate;
-
+    
+    @Column(name = "IMG_CD")
+    private String imgCd;
+    
     // Getters and Setters
     @JsonProperty("CRE_SEQ")
     public Long getCreSeq() {
@@ -65,6 +68,14 @@ public class EntranceCheck {
 
     public void setCreDate(LocalDateTime creDate) {
         this.creDate = creDate;
+    }
+    
+    public String getImgCd() {
+    	return imgCd;
+    }
+    
+    public void setImgCd(String imgCd) {
+    	this.imgCd = imgCd;
     }
     
     @PrePersist
