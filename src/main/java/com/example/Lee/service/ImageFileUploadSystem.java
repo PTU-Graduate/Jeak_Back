@@ -43,8 +43,11 @@ public class ImageFileUploadSystem {
         // 실제 파일 저장
         Files.copy(file.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
 
-        // 클라이언트에서 접근 가능한 경로 반환
+        // 저장된 파일의 상대 경로 생성
         String relativePath = "/uploads/" + dateDir + "/" + imagePath.getFileName().toString();
+
+        // DB에 저장할 경로: 클라이언트가 접근 가능한 URL
         return clientBaseUrl + relativePath;
     }
+
 }
