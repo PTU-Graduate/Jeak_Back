@@ -25,6 +25,9 @@ public class BachelorCheck {
 
     @Column(name = "CRE_DATE")
     private LocalDateTime creDate;
+    
+    @Column(name = "IMG_CD")
+    private String imgCd;
 
     // Getters and Setters
     @JsonProperty("CRE_SEQ")
@@ -66,6 +69,14 @@ public class BachelorCheck {
 
     public void setCreatedDate(LocalDateTime createdDate) {
         this.creDate = createdDate;
+    }
+    
+    public String getImgCd() {
+    	return imgCd;
+    }
+    
+    public void setImgCd(String imgCd) {
+    	this.imgCd = imgCd;
     }
     
     @PrePersist
