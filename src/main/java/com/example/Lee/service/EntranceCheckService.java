@@ -79,11 +79,20 @@ public class EntranceCheckService {
                     entrance.setImgCd(newImagePath);
                 } else if (imageInput.equals(existingImagePath)) {
                     // 기존 경로와 동일한 값: 아무 작업도 하지 않음
-                } else if (imageInput.equals("")) {
-                    // 빈 문자열로 이미지 삭제 요청
-                    if (existingImagePath != null) {
-                        imageFileUploadSystem.deleteImageFile(existingImagePath);
-                        entrance.setImgCd(null); // DB 경로 null로 설정
+                } 
+            }
+            else if (imageInput == null || imageInput.trim().isEmpty()) {
+                // 3. 빈 문자열 (""), null인 경우: 이미지 삭제 요청
+                if (existingImagePath != null) {
+                    
+                    boolean deleteSuccess = imageFileUploadSystem.deleteImageFile(existingImagePath);
+                    
+                    // 이미지 파일 삭제가 성공적으로 이루어졌으면 DB에서 경로를 null로 설정
+                    if (deleteSuccess) {
+                        
+                        entrance.setImgCd(null);  // DB 경로 null로 설정
+                    } else {
+                   
                     }
                 }
             }
