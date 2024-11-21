@@ -97,8 +97,11 @@ public class ImageFileUploadSystem {
                 return false;
             }
 
-            // 서버 내 실제 파일 경로 생성
-            Path filePath = Paths.get(uploadDir, imagePath.replaceFirst("^/uploads/", ""));
+            // 클라이언트에서 전달된 경로에서 /uploads/ 부분을 제거하고,
+            // 실제 서버 내 경로로 변환
+            String serverFilePath = imagePath.replaceFirst("^http://89.168.40.124:8080/uploads/", "/var/www/ptu/uploads/");
+
+            Path filePath = Paths.get(serverFilePath);
 
             // 파일이 존재하는 경우 삭제
             if (Files.exists(filePath)) {
@@ -114,5 +117,7 @@ public class ImageFileUploadSystem {
             return false;
         }
     }
+
+
    
 }
