@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Base64;
 
 @Service
 public class ImageFileUploadSystem {
@@ -18,8 +19,35 @@ public class ImageFileUploadSystem {
     @Value("${client.base.url}")
     private String clientBaseUrl;
 
-    // 이미지 파일 저장 메소드
-    public String saveImageFile(MultipartFile file, String userId) throws IOException {
+    /**
+     * Base64 문자열을 디코딩하여 byte[]로 반환하는 메서드
+     * @param base64Image Base64 인코딩된 이미지 문자열
+     * @return 디코딩된 byte[] 데이터
+     * @throws IllegalArgumentException 잘못된 Base64 문자열인 경우 예외 발생
+     */
+    public byte[] decodeBase64Image(String base64Image) {
+        if (base64Image == null || base64Image.isEmpty()) {
+            throw new IllegalArgumentException("Invalid Base64 input");
+        }
+
+        // Base64 문자열에서 데이터 부분만 추출
+        String[] parts = base64Image.split(",");
+        String base64Data = parts.length > 1 ? parts[1] : parts[0];
+
+        // Base64 디코딩 수행
+        return Base64.getDecoder().decode(base64Data);
+    }
+
+    /**
+     * 디코딩된 byte[] 데이터를 파일로 저장하는 메서드
+     * 기존 MultipartFile 방식도 지원
+     * @param file (Optional) MultipartFile 이미지 파일
+     * @param imageBytes (Optional) Base64 디코딩된 byte[] 데이터
+     * @param userId 사용자 ID
+     * @return 저장된 이미지 경로 (클라이언트 접근용 URL)
+     * @throws IOException 파일 저장 실패 시 발생
+     */
+    public String saveImageFile(MultipartFile file, byte[] imageBytes, String userId) throws IOException {
         // 오늘 날짜로 디렉토리 생성
         String dateDir = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         Path userDir = Paths.get(uploadDir, dateDir);
@@ -42,7 +70,13 @@ public class ImageFileUploadSystem {
         } while (Files.exists(imagePath));
 
         // 실제 파일 저장
-        Files.copy(file.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+        if (file != null) {
+            Files.copy(file.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING); // MultipartFile 처리
+        } else if (imageBytes != null) {
+            Files.write(imagePath, imageBytes); // Base64 디코딩된 byte[] 처리
+        } else {
+            throw new IllegalArgumentException("No valid image data provided");
+        }
 
         // 저장된 파일의 상대 경로 생성
         String relativePath = "/uploads/" + dateDir + "/" + imagePath.getFileName().toString();
@@ -51,7 +85,11 @@ public class ImageFileUploadSystem {
         return clientBaseUrl + relativePath;
     }
 
-    // 이미지 파일 삭제 메소드
+    /**
+     * 이미지 파일 삭제 메서드
+     * @param imagePath 삭제할 파일 경로
+     * @return 삭제 성공 여부
+     */
     public boolean deleteImageFile(String imagePath) {
         try {
             // 이미지 경로가 유효한지 확인
@@ -76,4 +114,5 @@ public class ImageFileUploadSystem {
             return false;
         }
     }
+   
 }

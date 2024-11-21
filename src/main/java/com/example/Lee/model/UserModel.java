@@ -14,6 +14,8 @@ public class UserModel {
 	private String stdNum; // 학번
 	private String stdDepCd; // 학과 코드
 	private String name; // 이름
+	private String email;
+	private String creCon;
 
 	// 생성자, 게터, 세터 등의 필요한 메서드는 생략합니다.
 
@@ -37,6 +39,12 @@ public class UserModel {
 	public String getName() {
 		return name;
 	}
+	public String getEmail() {
+		return email;
+	}
+	public String getCreCon() {
+		return creCon;
+	}
 
 	public void setMembId(String membId) {
 		this.membId = membId;
@@ -56,5 +64,11 @@ public class UserModel {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public void setCreCon(String crecon) {
+		this.creCon = crecon;
 	}
 }
