@@ -5,6 +5,7 @@ import com.example.Lee.model.EntranceCheck;
 import com.example.Lee.service.EntranceCheckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,49 +40,61 @@ public class EntranceCheckController {
         }
         return response;
     }
-    
-    //입학안내 추가 엔드포인트
+
+    // 입학안내 등록 엔드포인트
     @PostMapping("/PTU/Entrance/add")
     public ResponseEntity<CommonResponseModel> createEntrance(
-            @RequestParam("MEMB_ID") String membId,
-            @RequestParam("TIT") String title,
-            @RequestParam("CONT") String content,
-            @RequestParam(value = "IMAGE", required = false) MultipartFile imageFile) {
+            @RequestBody Map<String, String> requestData) {
+        try {
+            String membId = requestData.get("MEMB_ID");
+            String title = requestData.get("TIT");
+            String content = requestData.get("CONT");
+            String base64Image = requestData.get("IMAGE"); // Base64 인코딩된 이미지
 
-        if (membId == null || membId.isEmpty() || title == null || title.isEmpty() || content == null || content.isEmpty()) {
-            return ResponseEntity.badRequest().body(new CommonResponseModel("01"));
+            if (membId == null || membId.isEmpty() || title == null || title.isEmpty() || content == null || content.isEmpty()) {
+                return ResponseEntity.badRequest().body(new CommonResponseModel("01"));
+            }
+
+            EntranceCheck entrance = new EntranceCheck();
+            entrance.setMembId(membId);
+            entrance.setTitle(title);
+            entrance.setContent(content);
+
+            CommonResponseModel response = entranceCheckService.saveEntrance(entrance, base64Image, membId);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new CommonResponseModel("02")); // 이미지 처리 실패 시 02 반환
         }
-
-        EntranceCheck entrance = new EntranceCheck();
-        entrance.setMembId(membId);
-        entrance.setTitle(title);
-        entrance.setContent(content);
-        
-        if (imageFile == null || imageFile.isEmpty()) {
-        	entrance.setImgCd(null);
-        }
-
-        CommonResponseModel response = entranceCheckService.saveEntrance(entrance, imageFile, membId);
-        return ResponseEntity.ok(response);
     }
-    
-    //입학안내 업데이트 엔드포인트
+
+    // 입학안내 수정 엔드포인트
     @PostMapping("/PTU/Entrance/update")
     public ResponseEntity<CommonResponseModel> updateEntrance(@RequestBody Map<String, String> requestData) {
-    	int creSeq = Integer.parseInt(requestData.get("CRE_SEQ"));
-    	String title = requestData.get("TIT");
-    	String content = requestData.get("CONT");
-    	
-    	CommonResponseModel response = entranceCheckService.updateEntrance(creSeq, title, content);
-    	return ResponseEntity.ok(response);
+        try {
+            int creSeq = Integer.parseInt(requestData.get("CRE_SEQ"));
+            String title = requestData.get("TIT");
+            String content = requestData.get("CONT");
+            String imageInput = requestData.get("IMAGE"); // Base64 이미지 입력
+
+            CommonResponseModel response = entranceCheckService.updateEntrance(creSeq, title, content, imageInput);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new CommonResponseModel("02")); // 이미지 처리 실패 시 02 반환
+        }
     }
-    
-    //입학안내 삭제 엔드포인트
+
+    // 입학안내 삭제 엔드포인트
     @PostMapping("/PTU/Entrance/delete")
     public ResponseEntity<CommonResponseModel> deleteEntrance(@RequestBody Map<String, String> requestData) {
-    	int creSeq = Integer.parseInt(requestData.get("CRE_SEQ"));
-    	
-    	CommonResponseModel response = entranceCheckService.deleteEntrance(creSeq);
-    	return ResponseEntity.ok(response);
+        try {
+            int creSeq = Integer.parseInt(requestData.get("CRE_SEQ"));
+            CommonResponseModel response = entranceCheckService.deleteEntrance(creSeq);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new CommonResponseModel("02")); // 처리 실패 시 02 반환
+        }
     }
 }
