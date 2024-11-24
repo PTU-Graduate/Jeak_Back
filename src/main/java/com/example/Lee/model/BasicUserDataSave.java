@@ -28,13 +28,15 @@ public class BasicUserDataSave {
 	public void setSALT(String SALT) {
 		this.SALT = SALT;
 	}
-	
+	@JsonProperty("RSLT_CD")
 	public String getRSLT_CD() {
 		return RSLT_CD;
 	}
+	@JsonProperty("SALT")
 	public String getSALT() {
 		return SALT;
 	}
+	@JsonProperty("MEMB_ID")
 	public String getMEMB_ID() {
 		return MEMB_ID;
 	}

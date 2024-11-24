@@ -1,5 +1,7 @@
 package com.example.Lee.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -40,6 +42,7 @@ public class RegiModel {
 	}
 
 	// Getter and Setter 메서드: 엔티티의 속성에 접근하기 위한 메서드
+	@JsonProperty("MEMB_ID")
 	public String getMembId() {
 		return membId;
 	}
@@ -48,6 +51,7 @@ public class RegiModel {
 		this.membId = membId;
 	}
 
+	@JsonProperty("STD_NUM")
 	public String getStdNum() {
 		return stdNum;
 	}
@@ -55,7 +59,7 @@ public class RegiModel {
 	public void setStdNum(String stdNum) {
 		this.stdNum = stdNum;
 	}
-
+	@JsonProperty("EMAIL")
 	public String getEmail() {
 		return email;
 	}
@@ -63,7 +67,7 @@ public class RegiModel {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
+	@JsonProperty("PASS")
 	public String getPass() {
 		return pass;
 	}
@@ -71,7 +75,7 @@ public class RegiModel {
 	public void setPass(String pass) {
 		this.pass = pass;
 	}
-
+	@JsonProperty("STD_DEP_CD")
 	public String getStdDepCd() {
 		return stdDepCd;
 	}
@@ -79,7 +83,7 @@ public class RegiModel {
 	public void setStdDepCd(String stdDepCd) {
 		this.stdDepCd = stdDepCd;
 	}
-
+	@JsonProperty("NAME")
 	public String getName() {
 		return name;
 	}
@@ -90,6 +94,7 @@ public class RegiModel {
 	public void setSalt(String salt) {
 		this.salt = salt;
 	}
+	@JsonProperty("SALT")
 	public String getSalt() {
 		return salt;
 	}
