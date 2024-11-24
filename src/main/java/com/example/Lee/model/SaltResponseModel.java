@@ -10,7 +10,7 @@ public class SaltResponseModel {
         this.RSLT_CD = RSLT_CD;
         this.salt = salt;
     }
-
+    @JsonProperty("RSLT_CD")
     public String getRSLT_CD() {
         return RSLT_CD;
     }
@@ -18,7 +18,7 @@ public class SaltResponseModel {
     public void setRSLT_CD(String RSLT_CD) {
         this.RSLT_CD = RSLT_CD;
     }
-
+    @JsonProperty("SALT")
     public String getSalt() {
         return salt;
     }

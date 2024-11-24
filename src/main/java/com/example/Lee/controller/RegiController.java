@@ -78,8 +78,6 @@ public class RegiController {
         if (!"00".equals(mailResult.getRSLT_CD())) {
             return ResponseEntity.ok(mailResult);
         }
-
-        // 세션에 EMAIL 저장
    
         return ResponseEntity.ok(mailResult);
     }
