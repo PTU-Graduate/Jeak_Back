@@ -3,49 +3,55 @@ package com.example.Lee.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LoginRsltModel {
-	private String RSLT_CD;
-	private String STD_NUM;
-	private String STD_DEP_CD;
-	private String NAME;
+    private String RSLT_CD;
+    private String STD_NUM;
+    private String NAME;
+    private String EMAIL;
+    private String CRE_CON;
+    private String DEPARTMENT_NAME; // 학과 이름 필드 추가
 
-	public LoginRsltModel(String RSLT_CD) {
-	    this.RSLT_CD = RSLT_CD;
-	    this.STD_NUM = null;    // STD_NUM을 대문자로 수정
-	    this.STD_DEP_CD = null; // STD_DEP_CD를 대문자로 수정
-	    this.NAME = null;       // NAME을 대문자로 수정
-	}
+    // 결과 코드만 반환할 때 사용하는 생성자
+    public LoginRsltModel(String RSLT_CD) {
+        this.RSLT_CD = RSLT_CD;
+    }
 
+    // 모든 필드를 포함하는 생성자
+    public LoginRsltModel(String RSLT_CD, String STD_NUM,  String NAME, String EMAIL, String CRE_CON, String DEPARTMENT_NAME) {
+        this.RSLT_CD = RSLT_CD;
+        this.STD_NUM = STD_NUM;
+        this.NAME = NAME;
+        this.EMAIL = EMAIL;
+        this.CRE_CON = CRE_CON;
+        this.DEPARTMENT_NAME = DEPARTMENT_NAME;
+    }
 
-	
-	// 모든 필드를 포함하는 생성자
-	public LoginRsltModel(String RSLT_CD, String STD_NUM, String STD_DEP_CD, String NAME) {
-		this.RSLT_CD = RSLT_CD;
-		this.STD_NUM = STD_NUM;
-		this.STD_DEP_CD = STD_DEP_CD;
-		this.NAME = NAME;
-	}
+    @JsonProperty("RSLT_CD")
+    public String getRSLT_CD() {
+        return RSLT_CD;
+    }
 
-	@JsonProperty("RSLT_CD")
-	public String getRSLT_CD() {
-		return RSLT_CD;
-	}
+    @JsonProperty("STD_NUM")
+    public String getSTD_NUM() {
+        return STD_NUM;
+    }
 
-	public void setRSLT_CD(String RSLT_CD) {
-		this.RSLT_CD = RSLT_CD;
-	}
+    @JsonProperty("NAME")
+    public String getNAME() {
+        return NAME;
+    }
 
-	@JsonProperty("STD_NUM")
-	public String getSTD_NUM() {
-		return STD_NUM;
-	}
+    @JsonProperty("EMAIL")
+    public String getEMAIL() {
+        return EMAIL;
+    }
 
-	@JsonProperty("STD_DEP_CD")
-	public String getSTD_DEP_CD() {
-		return STD_DEP_CD;
-	}
+    @JsonProperty("CRE_CON")
+    public String getCRE_CON() {
+        return CRE_CON;
+    }
 
-	@JsonProperty("NAME")
-	public String getNAME() {
-		return NAME;
-	}
+    @JsonProperty("DEPARTMENT_NAME")
+    public String getDEPARTMENT_NAME() {
+        return DEPARTMENT_NAME;
+    }
 }
