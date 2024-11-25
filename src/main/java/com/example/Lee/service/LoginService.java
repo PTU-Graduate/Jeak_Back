@@ -37,10 +37,10 @@ public class LoginService {
         return ResponseEntity.ok(new LoginRsltModel(
                 "00",
                 user.getStdNum(),
-                departmentName,  // 학과 이름 반환
                 user.getName(),
+                user.getEmail(),
                 user.getCreCon(),
-                user.getEmail()
-        ));
+                departmentName // 학과 이름 추가
+            ));
     }
 }
