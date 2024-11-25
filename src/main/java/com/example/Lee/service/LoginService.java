@@ -34,15 +34,13 @@ public class LoginService {
 
         // 학과 코드로 학과 이름 조회
         String departmentName = departmentService.getDepartmentNameByCode(user.getStdDepCd());
-
-        // 인증 성공 - 학과 이름으로 반환
         return ResponseEntity.ok(new LoginRsltModel(
                 "00",
                 user.getStdNum(),
                 departmentName,  // 학과 이름 반환
                 user.getName(),
-                user.getEmail(),
-                user.getCreCon()
+                user.getCreCon(),
+                user.getEmail()
         ));
     }
 }
