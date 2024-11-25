@@ -5,6 +5,7 @@ import com.example.Lee.service.NoticeCheckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +22,8 @@ public class NoticeCheckController {
     }
 
     @PostMapping("/notices")
-    public Map<String, Object> getNotices(@RequestParam(defaultValue = "0") int page) {
+    public Map<String, Object> getNotices(@RequestBody Map<String, String> requestData)  {
+    	int page = Integer.parseInt(requestData.get("page"));
         Map<String, Object> response = new HashMap<>();
         try {
             int size = 10; // 페이지 당 게시글 수
