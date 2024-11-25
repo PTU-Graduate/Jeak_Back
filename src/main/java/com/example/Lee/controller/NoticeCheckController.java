@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -22,13 +21,17 @@ public class NoticeCheckController {
     }
 
     @PostMapping("/notices")
-    public Map<String, Object> getNotices(@RequestBody Map<String, String> requestData)  {
-    	int page = Integer.parseInt(requestData.get("page"));
+    public Map<String, Object> getNotices(@RequestBody Map<String, String> requestData) {
+        // 페이지 값 추출
+        int page = Integer.parseInt(requestData.get("page"));
+        
+        // 응답 맵 생성
         Map<String, Object> response = new HashMap<>();
         try {
             int size = 10; // 페이지 당 게시글 수
             Page<NoticeCheck> noticePage = noticeCheckService.getNotices(page, size);
 
+            // 반환할 응답 데이터 구성
             response.put("RSLT_CD", "00"); // 호출 정상
             response.put("NOTICES", noticePage.getContent());
         } catch (Exception e) {
@@ -37,5 +40,4 @@ public class NoticeCheckController {
         }
         return response;
     }
-    
 }
