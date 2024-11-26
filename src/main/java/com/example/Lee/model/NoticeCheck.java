@@ -21,6 +21,9 @@ public class NoticeCheck {
 
     @Column(name = "CONT")
     private String content;
+    
+    @Column(name = "IMG_CD")
+    private String img;
 
     @Column(name = "CRE_DATE")
     private LocalDateTime creDate;
@@ -57,6 +60,15 @@ public class NoticeCheck {
 
     public void setContent(String content) {
         this.content = content;
+    }
+    
+    @JsonProperty("IMG_CD")
+    public String getImgCd() {
+        return img;
+    }
+
+    public void setImgCd(String img) {
+        this.img = img;
     }
     @JsonProperty("CRE_DATE")
     public LocalDateTime getCreDate() {
