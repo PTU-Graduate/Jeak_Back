@@ -26,7 +26,8 @@ public class EntranceCheckController {
     }
 
     @PostMapping("/entrance")
-    public Map<String, Object> getEntrance(@RequestParam(defaultValue = "0") int page) {
+    public Map<String, Object> getEntrance(@RequestBody Map<String, String> requestData)  {
+    	int page = Integer.parseInt(requestData.get("page"));
         Map<String, Object> response = new HashMap<>();
         try {
             int size = 10; // 페이지 당 게시글 수

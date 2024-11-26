@@ -26,7 +26,8 @@ public class BachelorCheckController {
      * 학사안내 조회 엔드포인트
      */
     @PostMapping("/bachelor")
-    public Map<String, Object> getBachelor(@RequestParam(defaultValue = "0") int page) {
+    public Map<String, Object> getBachelor(@RequestBody Map<String, String> requestData)  {
+    	int page = Integer.parseInt(requestData.get("page"));
         Map<String, Object> response = new HashMap<>();
         try {
             int size = 10; // 페이지 당 게시글 수

@@ -26,7 +26,8 @@ public class ScholarCheckController {
     }
 
     @PostMapping("/scholar")
-    public Map<String, Object> getScholar(@RequestParam(defaultValue = "0") int page) {
+    public Map<String, Object> getScholar(@RequestBody Map<String, String> requestData)  {
+    	int page = Integer.parseInt(requestData.get("page"));
         Map<String, Object> response = new HashMap<>();
         try {
             int size = 10; // 페이지 당 게시글 수

@@ -36,24 +36,6 @@ public class RegiController {
         this.stdRegiService = stdRegiService;
         this.mailRegiService = mailRegiService;	// 생성자를 통해 주입받은 서비스 객체를 필드에 할당
 	}
-	
-	// 세션에 속성 값을 설정함
-	// 서비스패키지로 이동
-    private void setSessionAttribute(String name, Object value) {
-        RequestContextHolder.currentRequestAttributes().setAttribute(name, value, RequestAttributes.SCOPE_SESSION);
-    }
-
-    // 세션에서 속성 값을 가져옴
-	// 서비스패키지로 이동
-    private Object getSessionAttribute(String name) {
-        return RequestContextHolder.currentRequestAttributes().getAttribute(name, RequestAttributes.SCOPE_SESSION);
-    }
-
-    // 전부다 사용한 세션을 제거
-	// 서비스패키지로 이동
-    private void removeSessionAttribute(String name) {
-        RequestContextHolder.currentRequestAttributes().removeAttribute(name, RequestAttributes.SCOPE_SESSION);
-    }
 
     @PostMapping("/ID") // ID 등록 엔드포인트
     public ResponseEntity<CommonResponseModel> registerId(@RequestBody Map<String, String> requestData) {
@@ -66,8 +48,7 @@ public class RegiController {
             return ResponseEntity.ok(idResult);
         }
 
-        // 세션에 MEMB_ID 저장
-        setSessionAttribute("MEMB_ID", requestData.get("MEMB_ID"));
+   
         return ResponseEntity.ok(idResult);
     }
 
@@ -82,8 +63,8 @@ public class RegiController {
             return ResponseEntity.ok(stdResult);
         }
 
-        // 세션에 STD_NUM 저장
-        setSessionAttribute("STD_NUM", requestData.get("STD_NUM"));
+        
+    
         return ResponseEntity.ok(stdResult);
     }
 
@@ -97,21 +78,15 @@ public class RegiController {
         if (!"00".equals(mailResult.getRSLT_CD())) {
             return ResponseEntity.ok(mailResult);
         }
-
-        // 세션에 EMAIL 저장
-        setSessionAttribute("EMAIL", requestData.get("EMAIL"));
+   
         return ResponseEntity.ok(mailResult);
     }
     
     @PostMapping("/basic-info-save")
-    public ResponseEntity<BasicUserDataSave> registerBasicInfo(@RequestBody Map<String, String> requestData) {
-    	
-    	String membId = (String) getSessionAttribute("MEMB_ID");
-        String stdNum = (String) getSessionAttribute("STD_NUM");
-    	
+    public ResponseEntity<BasicUserDataSave> registerBasicInfo(@RequestBody Map<String, String> requestData) {	
         RegiModel regiData = new RegiModel();
-        regiData.setMembId(membId);
-        regiData.setStdNum(stdNum);
+        regiData.setMembId(requestData.get("MEMB_ID"));
+        regiData.setStdNum(requestData.get("STD_NUM"));
         regiData.setStdDepCd(requestData.get("STD_DEP_CD"));
         regiData.setName(requestData.get("NAME"));
 
@@ -123,23 +98,14 @@ public class RegiController {
     @PostMapping("/StdInfo") // 전체 정보 등록 엔드포인트
     public ResponseEntity<CommonResponseModel> registerStdInfo(@RequestBody Map<String, String> requestData) {
         // 세션에서 저장된 MEMB_ID, STD_NUM, EMAIL 가져오기
-        String membId = (String) getSessionAttribute("MEMB_ID");
-        String stdNum = (String) getSessionAttribute("STD_NUM");
-        String email = (String) getSessionAttribute("EMAIL");
-
         RegiModel regiData = new RegiModel();
-        regiData.setMembId(membId);
-        regiData.setStdNum(stdNum);
-        regiData.setEmail(email);
+        regiData.setMembId(requestData.get("MEMB_ID"));
+        regiData.setStdNum(requestData.get("STD_NUM"));
+        regiData.setEmail(requestData.get("EMAIL"));
         regiData.setPass(requestData.get("PASS"));
 
         // 회원 정보 저장
         CommonResponseModel result = regiService.completeRegistration(regiData);
-
-        // 다 사용한 세션 삭제
-        removeSessionAttribute("MEMB_ID");
-        removeSessionAttribute("STD_NUM");
-        removeSessionAttribute("EMAIL");
 
         // 리스트 반환
         return ResponseEntity.ok(result);

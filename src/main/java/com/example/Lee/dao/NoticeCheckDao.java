@@ -6,5 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface NoticeCheckDao extends JpaRepository<NoticeCheck, Long> {
-    Page<NoticeCheck> findAllByOrderByCreDateDesc(Pageable pageable);
+    // CRE_SEQ 기준 내림차순으로 정렬하여 데이터 반환
+    Page<NoticeCheck> findAllByOrderByCreSeqDesc(Pageable pageable);
 }
