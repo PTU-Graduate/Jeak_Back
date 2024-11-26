@@ -34,13 +34,16 @@ public class LoginService {
 
         // 학과 코드로 학과 이름 조회
         String departmentName = departmentService.getDepartmentNameByCode(user.getStdDepCd());
+
+        // LoginRsltModel에 MEMB_ID 값을 추가하여 반환
         return ResponseEntity.ok(new LoginRsltModel(
-                "00",
+                "00",        // 결과 코드
+                membId,      // membId를 MEMB_ID에 할당
                 user.getStdNum(),
                 user.getName(),
                 user.getEmail(),
                 user.getCreCon(),
                 departmentName // 학과 이름 추가
-            ));
+        ));
     }
 }

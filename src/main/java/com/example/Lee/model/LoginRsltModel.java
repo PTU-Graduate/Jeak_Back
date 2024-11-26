@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LoginRsltModel {
     private String RSLT_CD;
+    private String MEMB_ID;
     private String STD_NUM;
     private String NAME;
     private String EMAIL;
@@ -16,8 +17,9 @@ public class LoginRsltModel {
     }
 
     // 모든 필드를 포함하는 생성자
-    public LoginRsltModel(String RSLT_CD, String STD_NUM,  String NAME, String EMAIL, String CRE_CON, String DEPARTMENT_NAME) {
+    public LoginRsltModel(String RSLT_CD, String MEMB_ID,String STD_NUM,  String NAME, String EMAIL, String CRE_CON, String DEPARTMENT_NAME) {
         this.RSLT_CD = RSLT_CD;
+        this.MEMB_ID = MEMB_ID;
         this.STD_NUM = STD_NUM;
         this.NAME = NAME;
         this.EMAIL = EMAIL;
@@ -28,6 +30,10 @@ public class LoginRsltModel {
     @JsonProperty("RSLT_CD")
     public String getRSLT_CD() {
         return RSLT_CD;
+    }
+    @JsonProperty("MEMB_ID")
+    public String getMEMB_ID() {
+        return MEMB_ID;
     }
 
     @JsonProperty("STD_NUM")
